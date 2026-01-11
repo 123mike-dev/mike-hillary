@@ -218,3 +218,20 @@ footer {
     gap: 15px;
   }
 }
+/* Contact buttons side-by-side */
+.contact-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Special styling for attachment report */
+.attachment-btn {
+  background: #2e7d32;
+}
+
+.attachment-btn:hover {
+  background: #1b5e20;
+}
+
+

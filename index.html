@@ -9,6 +9,19 @@
 </head>
 <body>
 
+<!-- Navigation Menu -->
+<nav id="navbar">
+  <div class="container nav-container">
+    <a href="#about">Home</a>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#research">Research</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
 <!-- Header -->
 <header>
   <div class="container">
@@ -18,11 +31,11 @@
 </header>
 
 <!-- About Me -->
-<section id="about">
+<section id="about" class="fade-in">
   <div class="container">
     <h2>About Me</h2>
     <p>
-     Passion is the drive that keeps me going. My inclination towards Mathematics has drawn me to pursue a degree in Actuarial Science. 
+       Passion is the drive that keeps me going. My inclination towards Mathematics has drawn me to pursue a degree in Actuarial Science. 
      The ability to apply mathematics and statistics in my working life in the future would allow me to continuously engage in situations 
      requiring analytical and problem-solving skills. 
      A degree in Actuarial Science will not only enable me to take the professional actuary examinations and head on to careers involving insurance,
@@ -39,28 +52,48 @@
 </section>
 
 <!-- Projects -->
-<section id="projects">
+<section id="projects" class="fade-in">
   <div class="container">
     <h2>Projects</h2>
     <div class="project-buttons">
       <a href="https://github.com/mike-hillary/survival-analysis-framingham" target="_blank" class="project-btn">
         Survival Analysis – Framingham Heart Study
+        <span class="tooltip">Analyzed cardiovascular risk factors using Kaplan-Meier, Cox models, and log-rank tests in R & Python.</span>
       </a>
       <a href="https://github.com/mike-hillary/doe-anova-project" target="_blank" class="project-btn">
         Design & Analysis of Experiments (ANOVA)
+        <span class="tooltip">Performed ANOVA and post-hoc tests to study experimental effects and interpret outcomes.</span>
       </a>
       <a href="https://github.com/mike-hillary/ml-risk-prediction" target="_blank" class="project-btn">
         Machine Learning Risk Prediction Model
+        <span class="tooltip">Built predictive models for risk assessment using Python, including feature engineering and evaluation.</span>
       </a>
       <a href="https://github.com/mike-hillary/non-parametric-analysis" target="_blank" class="project-btn">
         Non-Parametric Statistical Analysis
+        <span class="tooltip">Applied Wilcoxon and Kruskal-Wallis tests to non-normal data; visualized distributions with boxplots and violin plots.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Research Project -->
+<section id="research" class="fade-in">
+  <div class="container">
+    <h2>Research Project</h2>
+    <div class="project-buttons">
+      <a href="https://github.com/mike-hillary/research-project" target="_blank" class="project-btn">
+        Actuarial Science Research Project
+        <span class="tooltip">
+          Conducted a detailed research study on [insert research topic], including data collection, 
+          statistical analysis, and interpretation. Results contribute to actuarial modeling and risk assessment insights.
+        </span>
       </a>
     </div>
   </div>
 </section>
 
 <!-- Skills -->
-<section id="skills">
+<section id="skills" class="fade-in">
   <div class="container">
     <h2>Technical Skills</h2>
     <p>
@@ -70,7 +103,7 @@
 </section>
 
 <!-- Industrial Attachment -->
-<section id="experience">
+<section id="experience" class="fade-in">
   <div class="container">
     <h2>Industrial Attachment</h2>
     <h3>Avenue Hospital Kisumu – Finance Department</h3>
@@ -88,7 +121,7 @@
 </section>
 
 <!-- Contact -->
-<section id="contact">
+<section id="contact" class="fade-in">
   <div class="container">
     <h2>Contact</h2>
     <p>Email: <a href="mailto:mikehillary1234567@gmail.com">mikehillary1234567@gmail.com</a></p>
@@ -104,6 +137,73 @@
     <p>© 2026 Hillary Mike</p>
   </div>
 </footer>
+
+<!-- JS: Mobile tooltips + smooth scroll + fade-in + active nav + staggered project reveal -->
+<script>
+  // Mobile tooltips toggle
+  document.querySelectorAll('.project-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if(window.innerWidth <= 768){
+        e.preventDefault();
+        const tooltip = btn.querySelector('.tooltip');
+        tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
+      }
+    });
+  });
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      target.scrollIntoView({behavior: 'smooth'});
+    });
+  });
+
+  // Fade-in on scroll for sections
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  const appearOnScroll = new IntersectionObserver(function(entries, observer){
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, appearOptions);
+  faders.forEach(fader => appearOnScroll.observe(fader));
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-container a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 80; // adjust for navbar height
+      if(pageYOffset >= sectionTop) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+
+  // Staggered fade-in for project/research buttons
+  const projectButtons = document.querySelectorAll('.project-buttons .project-btn');
+  projectButtons.forEach((btn, index) => {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          setTimeout(() => {
+            btn.classList.add('visible');
+          }, index * 200); // stagger: 200ms per button
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    observer.observe(btn);
+  });
+</script>
 
 </body>
 </html>
